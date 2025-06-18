@@ -21,4 +21,4 @@ def initialize_weight(shape, method=None, seed=None):
         return np.random.randn(*shape) * np.sqrt(1.0 / N)
     
     elif method == "he":
-        return np.random.randn(*shape) * np.sqrt(1.0 / N+D)
+        return np.random.randn(*shape) * np.sqrt(1.0 / (N+D))
