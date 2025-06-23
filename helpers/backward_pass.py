@@ -68,3 +68,48 @@ def tanh_backward(dout, cache):
   out = cache
 
   return dout * (1 - np.square(out))
+
+
+def batchnorm_backward(dout, cache):
+  """Alternative backward pass for batch normalization.
+
+  For this implementation you should work out the derivatives for the batch
+  normalizaton backward pass on paper and simplify as much as possible. You
+  should be able to derive a simple expression for the backward pass.
+  See the jupyter notebook for more hints.
+
+  Note: This implementation should expect to receive the same cache variable
+  as batchnorm_backward, but might not use all of the values in the cache.
+
+  Inputs / outputs: Same as batchnorm_backward
+  """
+  dx, dgamma, dbeta = None, None, None
+  ###########################################################################
+  # TODO: Implement the backward pass for batch normalization. Store the    #
+  # results in the dx, dgamma, and dbeta variables.                         #
+  #                                                                         #
+  # After computing the gradient with respect to the centered inputs, you   #
+  # should be able to compute gradients with respect to the inputs in a     #
+  # single statement; our implementation fits on a single 80-character line.#
+  ###########################################################################
+  # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+
+  x, gamma, beta, x_hat, sample_mean, sample_var, eps, inv_var = cache
+
+  dgamma = np.sum(dout * x_hat, axis=0)
+  dbeta = np.sum(dout, axis=0)
+
+  m, D = dout.shape
+  dl_xhat = dout * gamma
+  dx = (
+    (1 / m)
+    * inv_var
+    * (m * dl_xhat - np.sum(dl_xhat, axis=0) - x_hat * np.sum(dl_xhat * x_hat, axis=0))
+  )
+
+  # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+  ###########################################################################
+  #                             END OF YOUR CODE                            #
+  ###########################################################################
+
+  return dx, dgamma, dbeta

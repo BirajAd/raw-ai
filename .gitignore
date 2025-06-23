@@ -1,2 +1,7 @@
+
+# directories
 vids/
+
+# caches 
+*.pyc
 __pycache__/
